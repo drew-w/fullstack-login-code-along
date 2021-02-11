@@ -1,22 +1,33 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
+import "./App.css";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      loggedInUser: {}
+      email: "",
+      password: "",
+      loggedInUser: {},
     };
   }
 
-  async login() {}
+  async login() {
+    let { email, password } = this.state;
+    let res = await axios.post("/auth/login", { email, password });
+    this.setState({ loggedInUser: res.data, email: "", password: "" });
+  }
 
-  async signup() {}
+  async signup() {
+    let { email, password } = this.state;
+    let res = await axios.post("/auth/signup", { email, password });
+    this.setState({ loggedInUser: res.data, email: "", password: "" });
+  }
 
-  logout() {}
+  logout() {
+    axios.get("/auth/logout");
+    this.setState({ loggedInUser: {} });
+  }
 
   render() {
     let { loggedInUser, email, password } = this.state;
@@ -27,7 +38,7 @@ class App extends Component {
           <div>
             <input
               value={email}
-              onChange={e => this.setState({ email: e.target.value })}
+              onChange={(e) => this.setState({ email: e.target.value })}
               type="text"
               placeholder="Email"
             />
@@ -36,7 +47,7 @@ class App extends Component {
             <input
               value={password}
               type="password"
-              onChange={e => this.setState({ password: e.target.value })}
+              onChange={(e) => this.setState({ password: e.target.value })}
               placeholder="password"
             />
           </div>
@@ -50,9 +61,9 @@ class App extends Component {
 
         <hr />
 
-        <h4>Status: {loggedInUser.email ? 'Logged In' : 'Logged Out'}</h4>
+        <h4>Status: {loggedInUser.email ? "Logged In" : "Logged Out"}</h4>
         <h4>User Data:</h4>
-        <p> {loggedInUser.email ? JSON.stringify(loggedInUser) : 'No User'} </p>
+        <p> {loggedInUser.email ? JSON.stringify(loggedInUser) : "No User"} </p>
         <br />
       </div>
     );
